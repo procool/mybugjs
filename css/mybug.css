@@ -1,0 +1,19 @@
+.mybug-wrapper {
+    position: absolute;
+    overflow: hidden;
+    //background-color: yellow;
+    display: block;
+    width: 20px;
+    height: 10px;
+}
+
+.mybug-wrapper .mybug-img {
+    position: absolute;
+    background-color: yellow;
+    width: inherit;
+    height: inherit;
+    background: url("../img/mybug.png") no-repeat;
+    background-size: 110%;
+    background-position: 0px 8px;
+}
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bug example</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/mybug.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/mybug.min.js"></script>
+  </head>
+  <body>
+<script type="text/javascript" language="javascript">
+$( document ).ready(function() {
+
+    let bug = myBug($("body"), {
+
+        // Called on each queue action processing started:
+        on_action: function(distance, direction, speed) {
+            console.info("RUNNING DIST: "+distance+"; DEG: "+direction+"; SPEED: "+speed+"; OFFSET: " + this.offset.left + "x" + this.offset.top)
+        },
+
+        // Called on every step making:
+        on_step: function(direction, offset) {
+            // do something...
+        },
+
+        on_show: function() {
+            console.info("SHOW, BUG is visible: " + this.is_visible);
+        },
+        on_hide: function() {
+            console.info("HIDE, BUG is visible: " + this.is_visible);
+        },
+
+        // Check queue every 20/1000 sec:
+        queue_interval: 20, 
+
+        // Default time between steps: 30/1000 sec:
+        speed: 30, 
+
+        // Default step distance is 3*cos(rad) or 3*sin(rad) (IT'S NOT A PIXELS!)
+        step_size: 3,
+
+        // Maximum randomized direction difference in degrees
+        rand_direction_diff: 40,
+
+        // Changing direction probability:
+        rand_direction_chance: 3/5,
+
+        // Show/Hide animated:
+        fadein: 5000,
+        fadeout: 1000,
+
+        debug: 0
+    }).start();
+
+
+    // Show bug on any queue length:
+    bug.min_queue = 0
+
+    bug.show({left: 35, top: 35}); // Show in the random offset immidiatly
+
+    // Add new action into go_queue:
+    // bug.runto(direction, distance, speed, sleep_before);
+    // Run in 0 degrees direction on 100px distance, 40/1000 sec per step, but sleep 1sec before:
+    bug.runto(0, 100, 20, 1000);
+
+    // Run in [90, 180, 245] degrees direction on 30px distance, 50/1000 sec per step, but sleep 1/3sec before:
+    bug.runto(90, 30, 50, 300);
+    bug.runto(180, 30, 50, 300);
+
+    // Run with callback:
+    bug.runto(245, 30, 50, 300, function() {
+        this.hide(1000); // Hide with any fader
+        // Show bug only if queue length >= 5:
+        this.min_queue = 5
+        // run mouse events processing:
+        this.start_random_mouse_running();
+    });
+
+
+
+
+});
+</script>
+
+
+  </body>
+</html>
