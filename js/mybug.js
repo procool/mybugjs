@@ -170,9 +170,8 @@ var myBug = function($main_wrapper, opts) {
         this.$wrap.append(this.$img);
         $main_wrapper.append(this.$wrap);
 
-        // Count maximum width and height:
-        this.max_h = $main_wrapper.outerHeight(true)-100;
-        this.max_w = $main_wrapper.outerWidth(true)-100;
+        // Set maximum width and height of working area:
+        this.set_max_xy();
 
         // Cache mouse movements here:
         this._mouse_history = [];
@@ -189,6 +188,15 @@ var myBug = function($main_wrapper, opts) {
     }
 
 
+    proto.set_max_xy = function() {
+        // Count maximum width and height:
+        this.max_h = $main_wrapper.outerHeight(true)-100;
+        this.max_w = $main_wrapper.outerWidth(true)-100;
+        if (this.max_h <= 10) this.max_h = document.body.clientHeight;
+        if (this.max_w <= 10) this.max_w = document.body.clientWidth;
+        if (this.max_h <= 10) this.max_h = screen.height;
+        if (this.max_w <= 10) this.max_w = screen.width;
+    }
 
     // Set next sprite of bug by count number:
     proto._draw_img_count = function(count) {
@@ -297,6 +305,7 @@ var myBug = function($main_wrapper, opts) {
     proto.start = function() {
         var this_ = this;
         this.iv_go_queue_running_check = setInterval(function() {
+            this_.set_max_xy();
             this_.go_queue_run();
         }, opts["queue_interval"]);
         return this;
